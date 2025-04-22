@@ -79,8 +79,6 @@ typedef struct engineeringSpecialty{
 
 }engineeringSpecialty;
 
-
-
 typedef struct engSpec_List{
 
     engineeringSpecialty* top;
@@ -206,7 +204,6 @@ engineer* new_engineer(char* nm, int numb, engineeringSpecialty* engSpec_list, c
 }
 
 organization* new_organization(char* nm, int taxID, char* mail, char* addr, char* actDescript, char* phone, challenge* chall_list, char* pass){
-
     struct organization* org = (organization*)malloc(sizeof(organization));
     org->name = create_String(nm);
     org->taxIdentificationNumber = create_String(taxID);
@@ -220,7 +217,6 @@ organization* new_organization(char* nm, int taxID, char* mail, char* addr, char
     org->password = create_String(pass);
 
     return org;
-
 }
 
 challenge* new_challenge(char* nm, char* descript, char* engType, int h){
