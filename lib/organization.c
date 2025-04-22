@@ -1,6 +1,6 @@
 #include "organization.h"
 
-organization* new_organization(char* nm, int taxID, char* mail, char* addr, char* actDescript, char* phone, challenge* chall_list, char* pass) {
+organization* new_organization(char* nm, int taxID, char* mail, char* addr, char* actDescript, char* phone, challenge_list* chall_list, char* pass) {
     struct organization* org = (organization*)malloc(sizeof(organization));
     org->name = STRING(nm, 64);
     org->taxIdentificationNumber = taxID;

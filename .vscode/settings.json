@@ -3,6 +3,7 @@
         "cstdlib": "c",
         "string.h": "c",
         "challenge.h": "c",
-        "structs.h": "c"
+        "structs.h": "c",
+        "server.h": "c"
     }
 }

@@ -1,20 +1,17 @@
 #include "engineers.h"
 
-engineer* new_engineer(char* nm, int numb, engineeringSpecialty* engSpec_list, char* employInst,
-    bool studStat, aoE_list* areasOfExpertise_list, char* email, char* phone, char* pass) {
+engineer* new_engineer(char* nm, int numb, char* engineeringSpecialty, char* employInst,
+    bool studStat, char* areasOfExpertise, char* email, char* phone, char* pass) {
 
     struct engineer* eng = (engineer*)malloc(sizeof(engineer));
     eng->name = STRING(nm, 64);
     eng->number = numb;
-    eng->engineeringSpecialty_list = engSpec_list;
+    eng->engineeringSpecialty = STRING(engineeringSpecialty, 64);
     eng->employmentInstitution = STRING(employInst, 64);
     eng->studentStatus = studStat;
-    eng->areasOfExpertise_list = areasOfExpertise_list;
+    eng->areasOfExpertise = STRING(areasOfExpertise, 64);
     eng->email = STRING(email, 64);
-
-    for (int i = 0; i < 9; i++) {
-        *(eng->phoneNumber + i) = *(phone);
-    }
+    eng->phoneNumber = STRING(phone, 12);
 
     eng->password = STRING(pass, 64);
 

@@ -8,8 +8,6 @@
 
 // Struct pre declaration
 
-struct areasOfExpertise;
-struct engineeringSpecialty;
 struct engineer;
 struct challenge;
 struct organization;
@@ -21,38 +19,17 @@ typedef struct str {
     char* text;
 } str;
 
-typedef struct areasOfExpertise {
-    char* data;
-    struct areasOfExpertise* next;
-} areasOfExpertise;
-
-typedef struct aoE_list {
-    areasOfExpertise* top;
-    areasOfExpertise* bottom;
-} aoE_list;
-
-typedef struct engineeringSpecialty {
-    char* data;
-    struct engineeringSpecialty* next;
-
-} engineeringSpecialty;
-
-typedef struct engSpec_List {
-    engineeringSpecialty* top;
-    engineeringSpecialty* bottom;
-} engSpec_List;
-
 // Engineer struct declaration
 
 typedef struct engineer {
     char* name;
     int number;
-    engSpec_List* engineeringSpecialty_list;
+    char* engineeringSpecialty;
     char* employmentInstitution;
     bool studentStatus;
-    aoE_list* areasOfExpertise_list;
+    char* areasOfExpertise;
     char* email;
-    char phoneNumber[9];
+    char* phoneNumber;
     char* password;
 } engineer;
 
