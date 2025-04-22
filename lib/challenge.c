@@ -18,16 +18,16 @@ challenge_list* new_challenge_list() {
     return list;
 }
 
-void add_challenge(challenge* chall, challenge_list* list) {
-    if (list->top == NULL) {
-        list->top = chall;
-        list->bottom = chall;
-    }
-    else {
-        list->bottom->next = chall;
-        list->bottom = chall;
-    }
-}
+// int add_challenge(challenge* chall, challenge_list* list) {
+//     if (list->top == NULL) {
+//         list->top = chall;
+//         list->bottom = chall;
+//     }
+//     else {
+//         list->bottom->next = chall;
+//         list->bottom = chall;
+//     }
+// }
 
 // void printChallenges(int client_fd, organization* org) {
 //     challenge* currentChall = org->challenge_list->top;

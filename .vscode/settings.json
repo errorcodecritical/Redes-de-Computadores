@@ -4,6 +4,7 @@
         "string.h": "c",
         "challenge.h": "c",
         "structs.h": "c",
-        "server.h": "c"
+        "server.h": "c",
+        "engineers.h": "c"
     }
 }

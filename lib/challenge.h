@@ -5,13 +5,13 @@
 
 #define BUF_SIZE 1024
 
-int add_engineer();
-int remove_engineer();
+int add_challenge();
+int remove_challenge();
 
-int get_all_engineers();
-int get_accepted_engineers();
-int get_pending_engineers();
-int get_rejected_engineers();
+int get_all_challenges();
+int get_accepted_challenges();
+int get_pending_challenges();
+int get_rejected_challenges();
 
 int save_challenge_data();
 int load_challenge_data();

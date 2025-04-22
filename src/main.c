@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "server.h"
+#include "engineers.h"
 
 int main() {
     int fd, client;
@@ -11,15 +12,32 @@ int main() {
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(SERVER_PORT);
 
-    if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         error("in function socket");
+    }
 
-    if (bind(fd, (struct sockaddr*)&addr, sizeof(addr)) < 0)
+    if (bind(fd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
         error("in function bind");
+    }
 
-    if (listen(fd, 5) < 0)
+    if (listen(fd, 5) < 0) {
         error("in function listen");
+    }
 
+    add_engineer("boop", 1, "sex", "uc", false, "oral", "bitch@ass.com", "123456789", "oop", 0);
+
+    engineer* p;
+
+    int n = get_all_engineers(&p);
+
+    for (int i = 0; i < n; i++) {
+        printf("%d: %s\n", i, p[i].email);
+    }
+
+    // remove_engineer("bitch@ass.com");
+
+    while(1);
+    
     printf("Banana");
 
     while (1) {

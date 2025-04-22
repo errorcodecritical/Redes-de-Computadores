@@ -1,13 +1,17 @@
 #ifndef STRUCTS_API_H
 #define STRUCTS_API_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h> 
 #include <string.h>
 
-// Struct pre declaration
+#include "sqlite3.h"
 
+#define LOCAL_DB "bin/local.db"
+
+// Struct pre declaration
 struct engineer;
 struct challenge;
 struct organization;

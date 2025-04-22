@@ -3,10 +3,10 @@
 
 #include "structs.h"
 
-int add_engineer();
-int remove_engineer();
+int add_engineer(char* name, int number, char* specialty, char* institution, bool student, char* areas_of_expertise, char* email, char* phone, char* password, int status);
+int remove_engineer(char* email);
 
-int get_all_engineers();
+int get_all_engineers(engineer** engineers);
 int get_accepted_engineers();
 int get_pending_engineers();
 int get_rejected_engineers();
