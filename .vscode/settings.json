@@ -5,6 +5,7 @@
         "challenge.h": "c",
         "structs.h": "c",
         "server.h": "c",
-        "engineers.h": "c"
+        "engineers.h": "c",
+        "chrono": "c"
     }
 }

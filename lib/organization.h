@@ -3,15 +3,10 @@
 
 #include "structs.h"
 
-int add_organization();
-int remove_organization();
+int add_organization(char* name, int tax_id, char* email, char* address, char* description, char* phone, char* password, int status);
+int update_organization(organization* organizations);
+int remove_organization(int id);
 
-int get_all_organizations();
-int get_accepted_organizations();
-int get_pending_organizations();
-int get_rejected_organizations();
-
-int save_organization_data();
-int load_organization_data();
+int get_all_organizations(organization** organizations, char* condition);
 
 #endif

@@ -59,6 +59,7 @@ typedef struct challenge {
 // Beggining of organization struct declaration
 
 typedef struct organization {
+    int organizationId;
     char* name;
     int taxIdentificationNumber;
     char* email;
@@ -66,7 +67,6 @@ typedef struct organization {
     char* activityDescription;
     char* phoneNumber;
     char* password;
-    int organizationId;
     int status;
 } organization;
 
