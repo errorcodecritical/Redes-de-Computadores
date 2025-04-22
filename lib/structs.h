@@ -26,6 +26,7 @@ typedef struct str {
 // Engineer struct declaration
 
 typedef struct engineer {
+    int id;
     char* name;
     int number;
     char* engineeringSpecialty;

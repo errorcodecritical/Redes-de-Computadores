@@ -3,6 +3,11 @@
 #include "server.h"
 #include "engineers.h"
 
+void error(char* msg) {
+    printf("Error: %s\n", msg);
+    exit(-1);
+}
+
 int main() {
     int fd, client;
     struct sockaddr_in addr, client_addr;
@@ -23,31 +28,22 @@ int main() {
     if (listen(fd, 5) < 0) {
         error("in function listen");
     }
-
-    add_engineer("boop", 1, "sex", "uc", false, "oral", "bitch@ass.com", "123456789", "oop", 0);
-
-    engineer* p;
-
-    int n = get_all_engineers(&p, "");
-
+    
+    // Diagnostics
+    engineer* e;
+    int n = get_all_engineers(&e, "");
     for (int i = 0; i < n; i++) {
-        printf("%d: %s\n", i, p[i].email);
+        printf("%d: %s\n", i, e[i].email);
     }
-
-    // p->email = "faggot@shitballs.com";
-
-    // update_engineer(p);
-
-    remove_engineer("faggot@shitballs.com");
-
-    add_challenge("Finish this shit", "We cooked...", "ENGINEERING", 2, 1, 0);
-
     challenge* c;
-
-    int m = get_all_challenges(&c, "");
-
-    for (int i = 0; i < m; i++) {
+    n = get_all_challenges(&c, "");
+    for (int i = 0; i < n; i++) {
         printf("%d: %s\n", i, c[i].name);
+    }
+    organization* o;
+    n = get_all_organizations(&o, "");
+    for (int i = 0; i < n; i++) {
+        printf("%d: %s\n", i, o[i].email);
     }
     
     printf("Banana");

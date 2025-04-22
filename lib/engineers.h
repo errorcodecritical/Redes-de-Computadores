@@ -8,5 +8,6 @@ int update_engineer(engineer* engineers);
 int remove_engineer(char* email);
 
 int get_all_engineers(engineer** engineers, char* condition);
+void engineerRegister(int client_fd);
 
 #endif

@@ -8,5 +8,6 @@ int update_organization(organization* organizations);
 int remove_organization(int id);
 
 int get_all_organizations(organization** organizations, char* condition);
+void organizationRegister(int client_fd);
 
 #endif

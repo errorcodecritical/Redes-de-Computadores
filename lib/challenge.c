@@ -82,8 +82,8 @@ int update_challenge(challenge* challenges) {
     }
 
     /* Create merged SQL statement */
-    sprintf(sql, "UPDATE engineers SET name='%s',description='%s',type='%s',hours='%d',organization_id='%d',status='%d'; ",
-        challenges->name, challenges->description, challenges->engineerType, challenges->hours, challenges->organizationId, challenges->status);
+    sprintf(sql, "UPDATE challenges SET name='%s',description='%s',type='%s',hours='%d',organization_id='%d',status='%d' WHERE id='%d'; ",
+        challenges->name, challenges->description, challenges->engineerType, challenges->hours, challenges->organizationId, challenges->status, challenges->id);
 
     /* Execute SQL statement */
     if(sqlite3_exec(db, sql, callback_challenges, 0, &err) != SQLITE_OK){

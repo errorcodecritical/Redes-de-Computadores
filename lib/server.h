@@ -25,4 +25,9 @@ void send_engineer_menu(int client_fd);
 void send_organization_menu(int client_fd);
 void send_admin_menu(int client_fd);
 
+int getSelectedOptionInt(int client_fd);
+int getSelectedOptionInRange(int client_fd, int min, int max);
+
+void writeStr(int client_fd, char* str);
+
 #endif

@@ -16,15 +16,17 @@ int select_callback_engineers(void *data, int argc, char **argv, char **azColNam
 
     engineer* e = &cbData->engineers[cbData->index];
 
-    e->name = argv[0] ? strdup(argv[0]) : NULL;
-    e->number = argv[1] ? atoi(argv[1]) : 0;
-    e->engineeringSpecialty = argv[2] ? strdup(argv[2]) : NULL;
-    e->employmentInstitution = argv[3] ? strdup(argv[3]) : NULL;
-    e->studentStatus = argv[4] ? atoi(argv[4]) : false; // SQLite stores booleans as integers
-    e->areasOfExpertise = argv[5] ? strdup(argv[5]) : NULL;
-    e->email = argv[6] ? strdup(argv[6]) : NULL;
-    e->phoneNumber = argv[7] ? strdup(argv[7]) : NULL;
-    e->password = argv[8] ? strdup(argv[8]) : NULL;
+    e->id = argv[0] ? atoi(argv[0]) : 0;
+    e->name = argv[1] ? strdup(argv[1]) : NULL;
+    e->number = argv[2] ? atoi(argv[2]) : 0;
+    e->engineeringSpecialty = argv[3] ? strdup(argv[3]) : NULL;
+    e->employmentInstitution = argv[4] ? strdup(argv[4]) : NULL;
+    e->studentStatus = argv[5] ? atoi(argv[5]) : false; // SQLite stores booleans as integers
+    e->areasOfExpertise = argv[6] ? strdup(argv[6]) : NULL;
+    e->email = argv[7] ? strdup(argv[7]) : NULL;
+    e->phoneNumber = argv[8] ? strdup(argv[8]) : NULL;
+    e->password = argv[9] ? strdup(argv[9]) : NULL;
+    e->status = argv[10] ? atoi(argv[10]) : 0;
 
     cbData->index++;
     return 0;
@@ -38,24 +40,6 @@ int callback_engineers(void *NotUsed, int argc, char **argv, char **azColName) {
     printf("\n");
     return 0;
  }
-
-engineer* new_engineer(char* nm, int numb, char* engineeringSpecialty, char* employInst,
-    bool studStat, char* areasOfExpertise, char* email, char* phone, char* pass) {
-
-    struct engineer* eng = (engineer*)malloc(sizeof(engineer));
-    eng->name = STRING(nm, 64);
-    eng->number = numb;
-    eng->engineeringSpecialty = STRING(engineeringSpecialty, 64);
-    eng->employmentInstitution = STRING(employInst, 64);
-    eng->studentStatus = studStat;
-    eng->areasOfExpertise = STRING(areasOfExpertise, 64);
-    eng->email = STRING(email, 64);
-    eng->phoneNumber = STRING(phone, 12);
-
-    eng->password = STRING(pass, 64);
-
-    return eng;
-}
 
 int add_engineer(char* name, int number, char* specialty, char* institution, bool student, char* areas_of_expertise, char* email, char* phone, char* password, int status) {
     sqlite3* db;
@@ -102,8 +86,8 @@ int update_engineer(engineer* engineers) {
     }
 
     /* Create merged SQL statement */
-    sprintf(sql, "UPDATE engineers SET name='%s',number='%d',specialty='%s',institution='%s',student='%d',areas_of_expertise='%s',email='%s',phone='%s',password='%s',status='%d'; ",
-        engineers->name, engineers->number, engineers->engineeringSpecialty, engineers->employmentInstitution, engineers->studentStatus, engineers->areasOfExpertise, engineers->email, engineers->phoneNumber, engineers->password, engineers->status);
+    sprintf(sql, "UPDATE engineers SET name='%s',number='%d',specialty='%s',institution='%s',student='%d',areas_of_expertise='%s',email='%s',phone='%s',password='%s',status='%d' WHERE id='%d'; ",
+        engineers->name, engineers->number, engineers->engineeringSpecialty, engineers->employmentInstitution, engineers->studentStatus, engineers->areasOfExpertise, engineers->email, engineers->phoneNumber, engineers->password, engineers->status, engineers->id);
 
     /* Execute SQL statement */
     if(sqlite3_exec(db, sql, callback_engineers, 0, &err) != SQLITE_OK){
@@ -179,4 +163,56 @@ int get_all_engineers(engineer** engineers, char* condition) {
     sqlite3_close(db);
 
     return cbData.index;
+}
+
+void engineerRegister(int client_fd) {
+	int oeNumber;
+    int nread;
+    bool studentStatus;
+    char fullName[100], specialty[50], institution[100];
+    char areasOfExpertise[200], email[100], phone[20], pass[20];
+    char buf[10];
+
+    // Get engineer's details
+    write(client_fd, "Enter your full name: ", strlen("Enter your full name: "));
+    nread = read(client_fd, fullName, 100 - 1);
+    fullName[nread - 2] = '\0';
+
+    write(client_fd, "Enter your OE number: ", strlen("Enter your OE number: "));
+    nread = read(client_fd, buf, 10 - 1);
+    buf[nread - 2] = '\0';
+    oeNumber = atoi(buf);
+
+    write(client_fd, "Enter a password: ", strlen("Enter a password: "));
+    nread = read(client_fd, pass, 20 - 1);
+    pass[nread - 2] = '\0';
+
+    write(client_fd, "Enter your engineering specialty: ", strlen("Enter your engineering specialty: "));
+    nread = read(client_fd, specialty, 50 - 1);
+    specialty[nread - 2] = '\0';
+
+    write(client_fd, "Enter your institution of employment: ", strlen("Enter your institution of employment: "));
+    nread = read(client_fd, institution, 100 - 1);
+    institution[nread - 2] = '\0';
+
+    write(client_fd, "Are you still a student? (1/0): ", strlen("Are you still a student? (1/0): "));
+    nread = read(client_fd, buf, 10 - 1);
+    buf[nread - 2] = '\0';
+    studentStatus=atoi(buf);
+
+    write(client_fd, "Enter your areas of expertise: ", strlen("Enter your areas of expertise: "));
+    nread = read(client_fd, areasOfExpertise, 200 - 1);
+    areasOfExpertise[nread - 2] = '\0';
+
+    write(client_fd, "Enter your email address: ", strlen("Enter your email address: "));
+    nread = read(client_fd, email, 100 - 1);
+    email[nread - 2] = '\0';
+
+    write(client_fd, " Enter your mobile phone number (optional): ", strlen(" Enter your mobile phone number (optional): "));
+    nread = read(client_fd, phone, 20 - 1);
+    phone[nread - 2] = '\0';
+
+    write(client_fd, "\nRegistration successful!\n", strlen("\nRegistration successful!\n"));
+    
+    add_engineer(fullName,oeNumber,specialty,institution,studentStatus,areasOfExpertise,email,phone,pass,1);
 }
