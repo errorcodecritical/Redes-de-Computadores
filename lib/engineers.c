@@ -88,6 +88,36 @@ int add_engineer(char* name, int number, char* specialty, char* institution, boo
     return 1;
 }
 
+int update_engineer(engineer* engineers) {
+    sqlite3* db;
+    char sql[512];
+    char* err = 0;
+
+    /* Open database */  
+    if(sqlite3_open(LOCAL_DB, &db)) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return 0;
+    } else {
+        fprintf(stderr, "Opened database successfully\n");
+    }
+
+    /* Create merged SQL statement */
+    sprintf(sql, "UPDATE engineers SET name='%s',number='%d',specialty='%s',institution='%s',student='%d',areas_of_expertise='%s',email='%s',phone='%s',password='%s',status='%d'; ",
+        engineers->name, engineers->number, engineers->engineeringSpecialty, engineers->employmentInstitution, engineers->studentStatus, engineers->areasOfExpertise, engineers->email, engineers->phoneNumber, engineers->password, engineers->status);
+
+    /* Execute SQL statement */
+    if(sqlite3_exec(db, sql, callback, 0, &err) != SQLITE_OK){
+        fprintf(stderr, "SQL error: %s\n", err);
+        sqlite3_free(err);
+        return 0;
+    } else {
+        fprintf(stdout, "Operation done successfully\n");
+    }
+
+    sqlite3_close(db);
+    return 1; 
+}
+
 int remove_engineer(char* email) {
     sqlite3* db;
     char sql[512];
@@ -117,7 +147,7 @@ int remove_engineer(char* email) {
     return 1; 
 }
 
-int get_all_engineers(engineer** engineers) { 
+int get_all_engineers(engineer** engineers, char* condition) { 
     sqlite3* db;
     char sql[512];
     char* err = 0;
@@ -135,7 +165,7 @@ int get_all_engineers(engineer** engineers) {
     }
 
     /* Create SQL statement */
-    sprintf(sql, "SELECT * from engineers");
+    sprintf(sql, "SELECT * from engineers %s", condition);
 
     /* Execute SQL statement */    
     if(sqlite3_exec(db, sql, select_callback, &cbData, &err) != SQLITE_OK){
@@ -149,16 +179,4 @@ int get_all_engineers(engineer** engineers) {
     sqlite3_close(db);
 
     return cbData.index;
-}
-
-int get_accepted_engineers() { 
-    return 1;
-}
-
-int get_pending_engineers() { 
-    return 1;
-}
-
-int get_rejected_engineers() { 
-    return 1;
 }

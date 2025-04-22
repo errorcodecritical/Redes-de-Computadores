@@ -28,15 +28,17 @@ int main() {
 
     engineer* p;
 
-    int n = get_all_engineers(&p);
+    int n = get_all_engineers(&p, "");
 
     for (int i = 0; i < n; i++) {
         printf("%d: %s\n", i, p[i].email);
     }
 
-    // remove_engineer("bitch@ass.com");
+    p->email = "faggot@shitballs.com";
 
-    while(1);
+    update_engineer(p);
+
+    // remove_engineer("bitch@ass.com");
     
     printf("Banana");
 

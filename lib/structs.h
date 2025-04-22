@@ -35,6 +35,7 @@ typedef struct engineer {
     char* email;
     char* phoneNumber;
     char* password;
+    bool status;
 } engineer;
 
 // End of Engineer struct declaration
