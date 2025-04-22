@@ -45,17 +45,14 @@ typedef struct engineer {
 // Beggining of chellenge declaration
 
 typedef struct challenge {
+    int id;
     char* name;
     char* description;
     char* engineerType;
     int hours;
-    struct challenge* next;
+    int organizationId;
+    int status;
 } challenge;
-
-typedef struct challenge_list {
-    challenge* top;
-    challenge* bottom;
-} challenge_list;
 
 // Ending of chellenge declaration
 
@@ -68,8 +65,9 @@ typedef struct organization {
     char* address;
     char* activityDescription;
     char* phoneNumber;
-    challenge_list* challenge_list;
     char* password;
+    int organizationId;
+    int status;
 } organization;
 
 #define STRING(s, n) strncpy(malloc(n), s, n)

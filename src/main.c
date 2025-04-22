@@ -34,11 +34,21 @@ int main() {
         printf("%d: %s\n", i, p[i].email);
     }
 
-    p->email = "faggot@shitballs.com";
+    // p->email = "faggot@shitballs.com";
 
-    update_engineer(p);
+    // update_engineer(p);
 
-    // remove_engineer("bitch@ass.com");
+    remove_engineer("faggot@shitballs.com");
+
+    add_challenge("Finish this shit", "We cooked...", "ENGINEERING", 2, 1, 0);
+
+    challenge* c;
+
+    int m = get_all_challenges(&c, "");
+
+    for (int i = 0; i < m; i++) {
+        printf("%d: %s\n", i, c[i].name);
+    }
     
     printf("Banana");
 

@@ -5,15 +5,10 @@
 
 #define BUF_SIZE 1024
 
-int add_challenge();
-int remove_challenge();
+int add_challenge(char* name, char* description, char* type, int hours, int organization_id, bool status);
+int update_challenge(challenge* challenges);
+int remove_challenge(int id);
 
-int get_all_challenges();
-int get_accepted_challenges();
-int get_pending_challenges();
-int get_rejected_challenges();
-
-int save_challenge_data();
-int load_challenge_data();
+int get_all_challenges(challenge** challenges, char* condition);
 
 #endif

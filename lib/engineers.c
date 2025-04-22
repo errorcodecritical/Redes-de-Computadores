@@ -7,7 +7,7 @@ typedef struct {
     int index;
 } CallbackData;
 
-int select_callback(void *data, int argc, char **argv, char **azColName) {
+int select_callback_engineers(void *data, int argc, char **argv, char **azColName) {
     CallbackData* cbData = (CallbackData*)data;
 
     if (cbData->index >= MAX_ENGINEERS) {
@@ -30,7 +30,7 @@ int select_callback(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
+int callback_engineers(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
     for(i = 0; i < argc; i++) {
        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
@@ -75,7 +75,7 @@ int add_engineer(char* name, int number, char* specialty, char* institution, boo
         name, number, specialty, institution, student, areas_of_expertise, email, phone, password, status);
 
     /* Execute SQL statement */    
-    if(sqlite3_exec(db, sql, callback, 0, &err) != SQLITE_OK){
+    if(sqlite3_exec(db, sql, callback_engineers, 0, &err) != SQLITE_OK){
         fprintf(stderr, "SQL error: %s\n", err);
         sqlite3_free(err);
         return 0;
@@ -106,7 +106,7 @@ int update_engineer(engineer* engineers) {
         engineers->name, engineers->number, engineers->engineeringSpecialty, engineers->employmentInstitution, engineers->studentStatus, engineers->areasOfExpertise, engineers->email, engineers->phoneNumber, engineers->password, engineers->status);
 
     /* Execute SQL statement */
-    if(sqlite3_exec(db, sql, callback, 0, &err) != SQLITE_OK){
+    if(sqlite3_exec(db, sql, callback_engineers, 0, &err) != SQLITE_OK){
         fprintf(stderr, "SQL error: %s\n", err);
         sqlite3_free(err);
         return 0;
@@ -135,7 +135,7 @@ int remove_engineer(char* email) {
     sprintf(sql, "DELETE from engineers where email='%s'; SELECT * from engineers", email);
 
     /* Execute SQL statement */
-    if(sqlite3_exec(db, sql, callback, 0, &err) != SQLITE_OK){
+    if(sqlite3_exec(db, sql, callback_engineers, 0, &err) != SQLITE_OK){
         fprintf(stderr, "SQL error: %s\n", err);
         sqlite3_free(err);
         return 0;
@@ -168,7 +168,7 @@ int get_all_engineers(engineer** engineers, char* condition) {
     sprintf(sql, "SELECT * from engineers %s", condition);
 
     /* Execute SQL statement */    
-    if(sqlite3_exec(db, sql, select_callback, &cbData, &err) != SQLITE_OK){
+    if(sqlite3_exec(db, sql, select_callback_engineers, &cbData, &err) != SQLITE_OK){
         fprintf(stderr, "SQL error: %s\n", err);
         sqlite3_free(err);
         return 0;

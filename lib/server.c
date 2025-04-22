@@ -195,7 +195,6 @@ void send_admin_menu(int client_fd) {
                     write(client_fd, choice_error_prompt2, strlen(choice_error_prompt2));
             }
         }
-
     }
 }
 

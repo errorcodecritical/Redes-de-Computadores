@@ -1,54 +1,165 @@
 #include "challenge.h"
 
-challenge* new_challenge(char* nm, char* descript, char* engType, int h) {
-    struct challenge* chall = (challenge*)malloc(sizeof(challenge));
-    chall->name = STRING(nm, 64);
-    chall->description = STRING(descript, 256);
-    chall->engineerType = STRING(engType, 64);
-    chall->hours = h;
+#define MAX_CHALLENGES 100  // Define a maximum or manage dynamic resizing
 
-    return chall;
+typedef struct {
+    challenge* challenges;
+    int index;
+} CallbackData;
+
+int select_callback_challenges(void *data, int argc, char **argv, char **azColName) {
+    CallbackData* cbData = (CallbackData*)data;
+
+    if (cbData->index >= MAX_CHALLENGES) {
+        return 1; // Stop processing if array is full
+    }
+
+    challenge* e = &cbData->challenges[cbData->index];
+
+    e->id = argv[0] ? atoi(argv[0]) : 0;
+    e->name = argv[1] ? strdup(argv[1]) : NULL;
+    e->description = argv[2] ? strdup(argv[2]) : NULL;
+    e->engineerType = argv[3] ? strdup(argv[3]) : NULL;
+    e->hours = argv[4] ? atoi(argv[4]) : 0;
+    e->organizationId = argv[5] ? atoi(argv[5]) : 0;
+    e->status = argv[6] ? atoi(argv[6]) : 0;
+
+    cbData->index++;
+    return 0;
 }
 
-challenge_list* new_challenge_list() {
-    struct challenge_list* list = ((challenge_list*)malloc(sizeof(challenge_list)));
-    list->top = NULL;
-    list->bottom = NULL;
+static int callback_challenges(void *NotUsed, int argc, char **argv, char **azColName) {
+    int i;
+    for(i = 0; i < argc; i++) {
+       printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+    printf("\n");
+    return 0;
+ }
 
-    return list;
+int add_challenge(char* name, char* description, char* type, int hours, int organization_id, bool status) {
+    sqlite3* db;
+    char sql[512];
+    char* err = 0;
+
+    /* Open database */  
+    if(sqlite3_open(LOCAL_DB, &db)) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return 0;
+    } else {
+        fprintf(stderr, "Opened database successfully\n");
+    }
+
+    /* Create SQL statement */
+    sprintf(sql, "INSERT INTO challenges (name,description,type,hours,organization_id,status) VALUES ('%s','%s','%s',%d,%d,%d); ",
+        name, description, type, hours, organization_id, status);
+
+    /* Execute SQL statement */    
+    if(sqlite3_exec(db, sql, callback_challenges, 0, &err) != SQLITE_OK){
+        fprintf(stderr, "SQL error: %s\n", err);
+        sqlite3_free(err);
+        return 0;
+    } else {
+        fprintf(stdout, "Records created successfully\n");
+    }
+
+    sqlite3_close(db);
+
+    return 1;
 }
 
-// int add_challenge(challenge* chall, challenge_list* list) {
-//     if (list->top == NULL) {
-//         list->top = chall;
-//         list->bottom = chall;
-//     }
-//     else {
-//         list->bottom->next = chall;
-//         list->bottom = chall;
-//     }
-// }
+int update_challenge(challenge* challenges) {
+    sqlite3* db;
+    char sql[512];
+    char* err = 0;
 
-// void printChallenges(int client_fd, organization* org) {
-//     challenge* currentChall = org->challenge_list->top;
-//     char hours[BUF_SIZE];
+    /* Open database */  
+    if(sqlite3_open(LOCAL_DB, &db)) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return 0;
+    } else {
+        fprintf(stderr, "Opened database successfully\n");
+    }
 
-//     while(currentChall != NULL){
+    /* Create merged SQL statement */
+    sprintf(sql, "UPDATE engineers SET name='%s',description='%s',type='%s',hours='%d',organization_id='%d',status='%d'; ",
+        challenges->name, challenges->description, challenges->engineerType, challenges->hours, challenges->organizationId, challenges->status);
 
-//         write(client_fd, currentChall->name, strlen(currentChall->name));
-//         write(client_fd, currentChall->description, strlen(currentChall->description));
-//         write(client_fd, currentChall->engineerType, strlen(currentChall->engineerType));
-//         sprintf(hours, "%d", currentChall->hours);
-//         write(client_fd, hours, strlen(hours));
+    /* Execute SQL statement */
+    if(sqlite3_exec(db, sql, callback_challenges, 0, &err) != SQLITE_OK){
+        fprintf(stderr, "SQL error: %s\n", err);
+        sqlite3_free(err);
+        return 0;
+    } else {
+        fprintf(stdout, "Operation done successfully\n");
+    }
 
-//         sprintf(hours, "%d", currentChall->hours);
+    sqlite3_close(db);
+    return 1; 
+}
 
-//         printf("%s, %s, %s, %s\n", currentChall->name, currentChall->description, currentChall->engineerType, hours);
+int remove_challenge(int id) {
+    sqlite3* db;
+    char sql[512];
+    char* err = 0;
 
-//         currentChall = currentChall->next;
-//     }
+    /* Open database */  
+    if(sqlite3_open(LOCAL_DB, &db)) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return 0;
+    } else {
+        fprintf(stderr, "Opened database successfully\n");
+    }
 
-// }
+    /* Create merged SQL statement */
+    sprintf(sql, "DELETE from challenges where id='%d'; SELECT * from challenges", id);
+
+    /* Execute SQL statement */
+    if(sqlite3_exec(db, sql, callback_challenges, 0, &err) != SQLITE_OK){
+        fprintf(stderr, "SQL error: %s\n", err);
+        sqlite3_free(err);
+        return 0;
+    } else {
+        fprintf(stdout, "Operation done successfully\n");
+    }
+
+    sqlite3_close(db);
+    return 1;
+}
+
+int get_all_challenges(challenge** challenges, char* condition) {
+    sqlite3* db;
+    char sql[512];
+    char* err = 0;
+
+    *challenges = malloc(MAX_CHALLENGES * sizeof(challenge));
+
+    CallbackData cbData = { .challenges = *challenges, .index = 0 };
+
+    /* Open database */  
+    if(sqlite3_open(LOCAL_DB, &db)) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return 0;
+    } else {
+        fprintf(stderr, "Opened database successfully\n");
+    }
+
+    /* Create SQL statement */
+    sprintf(sql, "SELECT * from challenges %s", condition);
+
+    /* Execute SQL statement */    
+    if(sqlite3_exec(db, sql, select_callback_challenges, &cbData, &err) != SQLITE_OK){
+        fprintf(stderr, "SQL error: %s\n", err);
+        sqlite3_free(err);
+        return 0;
+    } else {
+        fprintf(stdout, "Records selected successfully\n");
+    }
+
+    sqlite3_close(db);
+
+    return cbData.index;
+}
 
 // void addChallengePrompt(int client_fd, organization * org){
 
@@ -87,10 +198,3 @@ challenge_list* new_challenge_list() {
 //     add_challenge(org->challenge_list, chall);
 
 // }
-
-
-int remove_challenge() { return 1; }
-int get_all_challenges() { return 1; }
-int get_accepted_challenges() { return 1; }
-int get_pending_challenges() { return 1; }
-int get_rejected_challenges() { return 1; }
