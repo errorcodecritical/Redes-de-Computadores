@@ -4,11 +4,24 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <netdb.h>
 #include <string.h>
 
+#include "structs.h"
+#include "engineers.h"
+#include "challenge.h"
+#include "organization.h"
+
 #define SERVER_PORT 9000
 #define BUF_SIZE 1024
+
+void process_client(int client_fd);
+void error(char* msg);
+void send_engineer_menu(int client_fd);
+void send_organization_menu(int client_fd);
+void send_admin_menu(int client_fd);
+int authenticate_user(int client_fd);
 
 #endif

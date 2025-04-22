@@ -2,18 +2,14 @@
 
 organization* new_organization(char* nm, int taxID, char* mail, char* addr, char* actDescript, char* phone, challenge* chall_list, char* pass) {
     struct organization* org = (organization*)malloc(sizeof(organization));
-    org->name = create_String(nm);
-    org->taxIdentificationNumber = create_String(taxID);
-    org->email = create_String(mail);
-    org->address = create_string(addr);
-    org->activityDescription = create_String(actDescript);
-
-    for (int i = 0; i < 9; i++) {
-        *(org->phoneNumber + i) = *(phone + i);
-    }
-
+    org->name = STRING(nm, 64);
+    org->taxIdentificationNumber = taxID;
+    org->email = STRING(mail, 64);
+    org->address = STRING(addr, 256);
+    org->activityDescription = STRING(actDescript, 256);
+    org->phoneNumber = STRING(phone, 12);
     org->challenge_list = chall_list;
-    org->password = create_String(pass);
+    org->password = STRING(pass, 64);
 
     return org;
 }

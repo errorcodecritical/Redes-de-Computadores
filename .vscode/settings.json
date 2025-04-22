@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "cstdlib": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "challenge.h": "c",
+        "structs.h": "c"
     }
 }

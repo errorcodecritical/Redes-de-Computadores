@@ -17,18 +17,6 @@
 #define SERVER_PORT 9000
 #define BUF_SIZE 1024
 
-void process_client(int client_fd);
-void error(char* msg);
-void send_engineer_menu(int client_fd);
-void send_organization_menu(int client_fd);
-void send_admin_menu(int client_fd);
-int authenticate_user(int client_fd);
-int listEngineers() { return 1; }
-int pendingEngineers() { return 1; }
-int removeEngineers() { return 1; }
-int closeFunction() { return 1; }
-
-
 int main() {
     int fd, client;
     struct sockaddr_in addr, client_addr;

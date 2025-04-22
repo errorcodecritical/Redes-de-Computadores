@@ -4,19 +4,19 @@ engineer* new_engineer(char* nm, int numb, engineeringSpecialty* engSpec_list, c
     bool studStat, aoE_list* areasOfExpertise_list, char* email, char* phone, char* pass) {
 
     struct engineer* eng = (engineer*)malloc(sizeof(engineer));
-    eng->name = create_String(nm);
+    eng->name = STRING(nm, 64);
     eng->number = numb;
     eng->engineeringSpecialty_list = engSpec_list;
-    eng->employmentInstitution = create_String(employInst);
+    eng->employmentInstitution = STRING(employInst, 64);
     eng->studentStatus = studStat;
     eng->areasOfExpertise_list = areasOfExpertise_list;
-    eng->email = create_String(email);
+    eng->email = STRING(email, 64);
 
     for (int i = 0; i < 9; i++) {
         *(eng->phoneNumber + i) = *(phone);
     }
 
-    eng->password = create_String(pass);
+    eng->password = STRING(pass, 64);
 
     return eng;
 }

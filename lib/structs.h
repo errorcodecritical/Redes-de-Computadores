@@ -1,13 +1,13 @@
 #ifndef STRUCTS_API_H
 #define STRUCTS_API_H
 
+#include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h> 
 #include <string.h>
 
 // Struct pre declaration
 
-struct str;
 struct areasOfExpertise;
 struct engineeringSpecialty;
 struct engineer;
@@ -22,7 +22,7 @@ typedef struct str {
 } str;
 
 typedef struct areasOfExpertise {
-    str* data;
+    char* data;
     struct areasOfExpertise* next;
 } areasOfExpertise;
 
@@ -32,7 +32,7 @@ typedef struct aoE_list {
 } aoE_list;
 
 typedef struct engineeringSpecialty {
-    str* data;
+    char* data;
     struct engineeringSpecialty* next;
 
 } engineeringSpecialty;
@@ -42,24 +42,18 @@ typedef struct engSpec_List {
     engineeringSpecialty* bottom;
 } engSpec_List;
 
-typedef struct challenge_list {
-    challenge* top;
-    challenge* bottom;
-} challenge_list;
-
 // Engineer struct declaration
 
 typedef struct engineer {
-    str* name;
+    char* name;
     int number;
     engSpec_List* engineeringSpecialty_list;
-    str* employmentInstitution;
+    char* employmentInstitution;
     bool studentStatus;
     aoE_list* areasOfExpertise_list;
-    str* email;
+    char* email;
     char phoneNumber[9];
-    str* password;
-
+    char* password;
 } engineer;
 
 // End of Engineer struct declaration
@@ -69,36 +63,33 @@ typedef struct engineer {
 // Beggining of chellenge declaration
 
 typedef struct challenge {
-    str* name;
-    str* description;
-    str* engineerType;
+    char* name;
+    char* description;
+    char* engineerType;
     int hours;
     struct challenge* next;
 } challenge;
+
+typedef struct challenge_list {
+    challenge* top;
+    challenge* bottom;
+} challenge_list;
 
 // Ending of chellenge declaration
 
 // Beggining of organization struct declaration
 
 typedef struct organization {
-    str* name;
+    char* name;
     int taxIdentificationNumber;
-    str* email;
-    str* address;
-    str* activityDescription;
-    char phoneNumber[9];
+    char* email;
+    char* address;
+    char* activityDescription;
+    char* phoneNumber;
     challenge_list* challenge_list;
-    str* password;
+    char* password;
 } organization;
 
-typedef struct sc {
-    struct str* string;
-    int size;
-} sc;
-
-typedef struct bc {
-    struct sc* small_class;
-    struct str* bctext;
-} bc;
+#define STRING(s, n) strncpy(malloc(n), s, n)
 
 #endif
